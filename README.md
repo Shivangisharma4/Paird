@@ -1,42 +1,120 @@
-# sv
+# Paird
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+**Intelligent study partner matching, built in.**
 
-## Creating a project
+Match with students who study what you study, score sessions automatically, and keep every study plan on track — no more studying alone.
 
-If you're seeing this, you've probably already done this step. Congrats!
+---
 
-```sh
-# create a new project
-npx sv create my-app
+## Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | [SvelteKit](https://kit.svelte.dev) |
+| Language | TypeScript |
+| Styling | [Tailwind CSS v4](https://tailwindcss.com) |
+| ORM | [Drizzle ORM](https://orm.drizzle.team) |
+| Database | [Neon](https://neon.tech) (serverless Postgres) |
+| Runtime | Node.js 22+ |
+
+---
+
+## Getting Started
+
+### 1. Clone and install
+
+```bash
+git clone https://github.com/Shivangisharma4/Paird.git
+cd Paird
+npm install
 ```
 
-To recreate this project with the same configuration:
+### 2. Set up environment
 
-```sh
-# recreate this project
-npx sv@0.15.1 create --template minimal --types ts --install npm paird
+```bash
+cp .env.example .env
 ```
 
-## Developing
+Open `.env` and add your Neon database URL:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```env
+DATABASE_URL=postgresql://user:password@ep-xxx.neon.tech/paird?sslmode=require
+```
 
-```sh
+Get a free database at [neon.tech](https://neon.tech).
+
+### 3. Push the schema
+
+```bash
+npx drizzle-kit push
+```
+
+### 4. Run the dev server
+
+```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Open [http://localhost:5173](http://localhost:5173).
 
-To create a production version of your app:
+---
 
-```sh
-npm run build
+## Project Structure
+
+```
+paird/
+├── src/
+│   ├── app.html              # HTML shell
+│   ├── app.css               # Global styles + Tailwind
+│   ├── lib/
+│   │   └── db/
+│   │       ├── schema.ts     # Drizzle table definitions
+│   │       └── index.ts      # Neon + Drizzle client
+│   └── routes/
+│       ├── +layout.svelte    # Root layout
+│       └── +page.svelte      # Landing page
+├── drizzle.config.ts         # Drizzle Kit config
+├── vite.config.ts            # Vite + Tailwind plugin
+└── .env.example              # Environment variable template
 ```
 
-You can preview the production build with `npm run preview`.
+---
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## Database Schema
+
+| Table | Description |
+|---|---|
+| `users` | Registered students (auth provider ID, university, major) |
+| `profiles` | Study profile — subjects, seeking, goals, availability |
+| `swipes` | Like / pass actions between users |
+| `matches` | Mutual likes — confirmed study partner pairs |
+| `sessions` | Scheduled study sessions linked to a match |
+
+Generate and run migrations:
+
+```bash
+npx drizzle-kit generate
+npx drizzle-kit migrate
+```
+
+---
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm run preview` | Preview production build |
+| `npx drizzle-kit push` | Push schema directly to DB |
+| `npx drizzle-kit studio` | Open Drizzle Studio (DB GUI) |
+
+---
+
+## Roadmap
+
+- [ ] Auth (university email OAuth)
+- [ ] Swipe queue with match scoring
+- [ ] Real-time session scheduling
+- [ ] In-app messaging for matched pairs
+- [ ] Subject-based leaderboards
