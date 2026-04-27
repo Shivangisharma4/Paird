@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+
+:root {
+  --cream: #f9f6f0;
+  --ink: #1a1208;
+  --muted: #6b5a47;
+  --faint: #e8e0d4;
+  --orange: #e07a2f;
+  --bg-dark: #0e0b1a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-dark);
+  margin: 0;
+}
+
+.serif { font-family: 'Instrument Serif', serif; }
